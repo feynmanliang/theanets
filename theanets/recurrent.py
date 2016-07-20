@@ -81,14 +81,14 @@ class Text(object):
         A string containing each character in the alphabet.
     '''
 
-    def __init__(self, text, alpha=None, min_count=2, unknown='\0'):
+    def __init__(self, text, alpha=None, min_count=2, unknown=u'\0'):
         self.alpha = alpha
         if self.alpha is None:
             self.alpha = ''.join(sorted(set(
                 char for char, count in
                 collections.Counter(text).items()
                 if char != unknown and count >= min_count)))
-        self.text = re.sub(r'[^{}]'.format(re.escape(self.alpha).encode('utf8')), unknown, text)
+        self.text = re.sub(unicode(r'[^{}]', 'utf-8').format(re.escape(self.alpha)), unknown, text)
         assert unknown not in self.alpha
         self._rev_index = unknown + self.alpha
         self._fwd_index = dict(zip(self._rev_index, range(1 + len(self.alpha))))
